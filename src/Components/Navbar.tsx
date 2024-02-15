@@ -7,7 +7,7 @@ interface IProps {
 
 const Navbar = ({}: IProps) => {
 
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
 
   const handleLogout = () => {
     setAuth({
@@ -26,14 +26,17 @@ const Navbar = ({}: IProps) => {
       <h1 className="text-black">Navbar</h1>
         <div className="flex gap-4">
             <NavLink to="/" className="text-xl text-black hover:text-primary active:text-primary">Home</NavLink>
-            <NavLink to="/login" className="text-xl text-black hover:text-primary active:text-primary">Login</NavLink>
+            {
+              auth ? <NavLink to="/login" className="text-xl text-black hover:text-primary active:text-primary">Login</NavLink> 
+              : 
+              <button 
+                className="text-xl text-black hover:text-primary active:text-primary"
+                onClick={handleLogout}
+              > 
+              Logout
+              </button>
+            }
         </div>
-        <button 
-          className="text-xl text-black hover:text-primary active:text-primary"
-          onClick={handleLogout}
-        > 
-        Logout
-        </button>
     </div>
   )
 }
