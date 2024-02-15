@@ -7,13 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 const ResetPassword = () => {
-    // the link will be like /reset-password/doctors?token=token or /reset-password/patients?token=token
-    // i need to know if the user is a doctor or a patient
+
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get('token');
     const userType = location.pathname.split('/')[2];
-    console.log(userType, token);
 
     const [isLoading, setIsLoading] = useState(false);
     const [password, setPassword] = useState("");
@@ -31,12 +29,10 @@ const ResetPassword = () => {
         try {
             switch (userType) {
                 case "doctors":
-                    const res = await doctorResetPassword(token!, password);
-                    console.log(res);
+                    await doctorResetPassword(token!, password);
                     break;
                 case "patients":
-                    const ress = await PatientsResetPassword(token!, password);
-                    console.log(ress);
+                    await PatientsResetPassword(token!, password);
                     break;
                 default:
                     break;
