@@ -23,7 +23,7 @@ const router = createBrowserRouter(
                         <Login />
                     </ProtectedRoute>
                 } />
-                <Route path="/reset-password" element={<Outlet />}>
+                <Route path="reset-password" element={<Outlet />}>
                     <Route index element={<h1>Reset Password</h1>} />
                     <Route path="doctors" element={<ResetPassword />} />
                     <Route path="patients" element={<ResetPassword />} />
