@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import ProtectedRoute from "../Components/auth/ProtectedRoute";
 import ResetPassword from "../pages/ResetPass";
+import VerifyEmail from "../pages/VerifyEmail";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -27,6 +28,11 @@ const router = createBrowserRouter(
                     <Route index element={<h1>Reset Password</h1>} />
                     <Route path="doctors" element={<ResetPassword />} />
                     <Route path="patients" element={<ResetPassword />} />
+                </Route>
+                <Route path="verify-email" element={<Outlet />}>
+                    <Route index element={<h1>Verify Email</h1>} />
+                    <Route path="doctors" element={<VerifyEmail />} />
+                    <Route path="patients" element={<VerifyEmail />} />
                 </Route>
             </Route>
 

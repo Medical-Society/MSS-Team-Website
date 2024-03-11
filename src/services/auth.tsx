@@ -24,3 +24,10 @@ export async function PatientsResetPassword(token: string, password: string) {
     });
     return response.data;
 }
+
+export async function verifyEmail(token: string, userType: string) {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/${userType}/verify`, {
+        token
+    });
+    return response.data;
+}
