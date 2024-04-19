@@ -21,15 +21,15 @@ const Navbar = ({}: IProps) => {
     Cookies.remove('admin');
   }
   return (
-    <div className="fixed top-0 z-20 left-0 w-full drop-shadow-sm p-4 flex justify-between items-center backdropfilter backdrop-blur-sm"> 
-      <h1 className="text-black">Navbar</h1>
+    <div className="bg-NewBlue text-white fixed top-0 z-20 left-0 w-full drop-shadow-sm p-4 flex justify-between items-center backdropfilter backdrop-blur-sm"> 
+      <h1 className="">Medical society</h1>
+        <NavLink to="/doctors" className="text-xl hover:text-primary active:text-primary">doctors</NavLink>
         <div className="flex gap-4">
-            <NavLink to="/" className="text-xl text-black hover:text-primary active:text-primary">Home</NavLink>
             {
-              !auth.token ? <NavLink to="/login" className="text-xl text-black hover:text-primary active:text-primary">Login</NavLink> 
+              !auth.token ? <NavLink to="/login" className="text-xl hover:text-primary active:text-primary">Login</NavLink> 
               : 
               <button 
-                className="text-xl text-black hover:text-primary active:text-primary"
+                className="text-xl hover:text-primary active:text-primary"
                 onClick={handleLogout}
               > 
               Logout

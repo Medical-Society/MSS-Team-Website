@@ -5,11 +5,13 @@ import { useAuth } from "../../hooks/useAuth";
 interface IProps {
     children: ReactNode;
     redirectPath: string;
+    isAuth: boolean;
 }
 
-const ProtectedRoute = ({ children, redirectPath }: IProps) => {
+const ProtectedRoute = ({ children, redirectPath, isAuth }: IProps) => {
     const { auth } = useAuth();
-    return auth.token ? <Navigate to={redirectPath} /> : <>{children}</>;
+    const isAuthUser = isAuth ? auth.token : !auth.token;
+    return isAuthUser ? <Navigate to={redirectPath} /> : <>{children}</>;
 }
 
 export default ProtectedRoute;

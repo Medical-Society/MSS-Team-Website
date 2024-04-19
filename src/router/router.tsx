@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import ProtectedRoute from "../Components/auth/ProtectedRoute";
 import ResetPassword from "../pages/ResetPass";
 import VerifyEmail from "../pages/VerifyEmail";
+import DoctorsSideBar from "../Components/DoctorsSideBar";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -12,7 +13,7 @@ const router = createBrowserRouter(
             <Route 
                 path="/" 
                 element={
-                    <div className="h-full flex flex-col p-10" >
+                    <div className="h-full flex flex-col" >
                         <Navbar />
                         <Outlet />
                     </div>
@@ -20,7 +21,7 @@ const router = createBrowserRouter(
             >
                 <Route index element={<Home />} />
                 <Route path="login" element={
-                    <ProtectedRoute redirectPath="/">
+                    <ProtectedRoute isAuth={true} redirectPath="/doctors">
                         <Login />
                     </ProtectedRoute>
                 } />
@@ -33,6 +34,21 @@ const router = createBrowserRouter(
                     <Route index element={<h1>Verify Email</h1>} />
                     <Route path="doctors" element={<VerifyEmail />} />
                     <Route path="patients" element={<VerifyEmail />} />
+                </Route>
+                
+                <Route path="/doctors" element={
+                    <ProtectedRoute isAuth={false} redirectPath="/login">
+                        <div className="flex items-center justify-between h-full">
+                            <DoctorsSideBar />
+                            <Outlet />
+                        </div>
+                    </ProtectedRoute>
+                    }
+                >
+                    <Route index element={<h1>all Doctors</h1>} />
+                    <Route path="pending" element={<h1>pending Doctors</h1>} />
+                    <Route path="approved" element={<h1>approved Doctors</h1>} />
+                    <Route path="rejected" element={<h1>rejected Doctors</h1>} />
                 </Route>
             </Route>
 
