@@ -2,8 +2,8 @@ import { useState } from "react";
 import FormInput from "../Components/Login/FormInput";
 import Button from "../Components/Login/Button";
 import { loginAdmin } from "../services/auth";
-import Cookies from "js-cookie";
-import { useAuth } from "../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { loginReducer } from "../app/features/authSlice";
 
 interface ILoginState {
   email: string;
@@ -11,7 +11,7 @@ interface ILoginState {
 }
 
 const Login = () => {
-  const { setAuth } = useAuth();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [login, setLogin] = useState<ILoginState>({
     email: '',
@@ -31,16 +31,7 @@ const Login = () => {
     console.log(login);
     try {
       const res = await loginAdmin(login.email, login.password);
-      Cookies.set('token', res.data.token);
-      console.log(res.data.token);
-      Cookies.set('admin', JSON.stringify(res.data.admin));
-      setAuth({
-        token: res.data.token,
-        admin: res.data.admin ?? {
-          name: '',
-          email: ''
-        }
-      });
+      dispatch(loginReducer({token: res.data.token, admin: res.data.admin}));
       console.log(res);
     }
     catch (error) {
