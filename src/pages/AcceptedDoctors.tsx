@@ -1,16 +1,17 @@
-import { useState } from "react"
-import Taple from "../Components/Taple"
-import { useGetAllDoctorsQuery } from "../app/services/DoctorsApi"
-import { IDoctor } from "../interfaces"
-import Paginator from "../Components/Paginator"
+import { useState } from "react";
+import Paginator from "../Components/Paginator";
+import Taple from "../Components/Taple";
+import { useGetAcceptedDoctorsQuery } from "../app/services/DoctorsApi";
+import { IDoctor } from "../interfaces";
+
 interface IProps {
 
 }
 
-const AllDoctors = ({}: IProps) => {
+const ApprovedDoctors = ({}: IProps) => {
   const [page, setPage] = useState<number>(1)
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const {data, isLoading, isError} = useGetAllDoctorsQuery({page, limit: rowsPerPage})
+  const {data, isLoading, isError} = useGetAcceptedDoctorsQuery({page, limit: rowsPerPage})
     
     if(isLoading) return <div>Loading...</div>
     if(isError) return <div>Error...</div>
@@ -18,7 +19,7 @@ const AllDoctors = ({}: IProps) => {
     const totalPages = data?.data?.totalPages || 0
     return (
       <div className="w-full">
-        <Taple 
+        <Taple
           data={allDoctors} 
         />
         <div className="flex justify-center items-center space-x-5">
@@ -43,7 +44,7 @@ const AllDoctors = ({}: IProps) => {
           />
         </div>
       </div>
-    )
-  }
+  )
+}
 
-export default AllDoctors
+export default ApprovedDoctors

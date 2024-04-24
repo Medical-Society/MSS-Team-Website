@@ -20,7 +20,7 @@ export const authSlice = createSlice({
       state.token = action.payload.token;
       state.admin = action.payload.admin;
       Cookies.set('token', action.payload.token || '');
-      Cookies.set('doctor', JSON.stringify(action.payload.admin) || '');
+      Cookies.set('admin', JSON.stringify(action.payload.admin) || '');
     },
     logoutReducer: (state) => {
       state.token = null;
