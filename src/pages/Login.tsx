@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormInput from "../Components/Login/FormInput";
 import Button from "../Components/Login/Button";
-import { loginAdmin } from "../services/auth";
 import { useDispatch } from "react-redux";
 import { loginReducer } from "../app/features/authSlice";
+import { useLoginMutation } from "../app/services/authApi";
 
 interface ILoginState {
   email: string;
@@ -12,7 +12,6 @@ interface ILoginState {
 
 const Login = () => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [login, setLogin] = useState<ILoginState>({
     email: '',
     password: ''
@@ -25,22 +24,27 @@ const Login = () => {
     });
   };
 
+  const [loginUser, {data, isSuccess, isLoading, isError, error}] = useLoginMutation();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
-    console.log(login);
-    try {
-      const res = await loginAdmin(login.email, login.password);
-      dispatch(loginReducer({token: res.data.token, admin: res.data.admin}));
-      console.log(res);
+    if (!login.email || !login.password) {
+      return alert('Please fill all fields');
     }
-    catch (error) {
-      console.log(error);
-    }
-    finally {
-      setIsLoading(false);
-    }
+    await loginUser(login);
   };
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      console.log(data);
+      dispatch(loginReducer({token: data.data.token, admin: data.data.result}))
+      alert('Login successful');
+    }
+    if (isError && error) {
+      const errorMessage = error as {data: {message: string}};
+      alert(errorMessage.data.message);
+    }
+  }, [isSuccess, isError, data, error]);
 
   return (
       <div className='flex flex-col justify-center items-center h-full'>
