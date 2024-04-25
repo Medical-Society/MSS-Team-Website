@@ -1,14 +1,16 @@
-import useAuth from "../hooks/useAuth"
+import { useSelector } from "react-redux"
+import { RootState } from "../app/store"
 
 interface IProps {
 
 }
 
 const Home = ({}: IProps) => {
-  const {auth} = useAuth()
+  const { admin } = useSelector((state: RootState) => state.auth)
+  console.log(admin)
   return (
     <div className="h-screen flex justify-center items-center">
-        <h1 className="text-3xl">Welcome {auth.admin.name}</h1>
+        <h1 className="text-3xl">Welcome {admin?.name}</h1>
     </div>
   )
 }

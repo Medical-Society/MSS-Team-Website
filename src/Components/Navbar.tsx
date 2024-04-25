@@ -1,32 +1,27 @@
-import { NavLink } from "react-router-dom"
-import useAuth from "../hooks/useAuth";
-import Cookies from "js-cookie";
+import { NavLink, useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux";
+import { logoutReducer } from "../app/features/authSlice";
+import { RootState } from "../app/store";
 interface IProps {
 
 }
 
 const Navbar = ({}: IProps) => {
 
-  const { auth, setAuth } = useAuth();
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { token } = useSelector((state: RootState) => state.auth)
   const handleLogout = () => {
-    setAuth({
-      token: "",
-      admin: {
-        name: "",
-        email: ""
-      }
-    })
-    Cookies.remove('token');
-    Cookies.remove('admin');
+    dispatch(logoutReducer());
+    navigate('/login');
   }
   return (
-    <div className="bg-NewBlue text-white fixed top-0 z-20 left-0 w-full drop-shadow-sm p-4 flex justify-between items-center backdropfilter backdrop-blur-sm"> 
+    <div className="bg-NewBlue text-white fixed top-0 z-20 left-0 w-full drop-shadow-sm p-4 flex justify-between items-center backdropfilter backdrop-blur-sm mb-20"> 
       <h1 className="">Medical society</h1>
         <NavLink to="/doctors" className="text-xl hover:text-primary active:text-primary">doctors</NavLink>
         <div className="flex gap-4">
             {
-              !auth.token ? <NavLink to="/login" className="text-xl hover:text-primary active:text-primary">Login</NavLink> 
+              !token ? <NavLink to="/login" className="text-xl hover:text-primary active:text-primary">Login</NavLink> 
               : 
               <button 
                 className="text-xl hover:text-primary active:text-primary"

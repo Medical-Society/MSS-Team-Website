@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormInput from "../Components/Login/FormInput";
 import Button from "../Components/Login/Button";
-import { loginAdmin } from "../services/auth";
-import Cookies from "js-cookie";
-import { useAuth } from "../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { loginReducer } from "../app/features/authSlice";
+import { useLoginMutation } from "../app/services/authApi";
+import { useNavigate } from "react-router-dom";
 
 interface ILoginState {
   email: string;
@@ -11,8 +12,8 @@ interface ILoginState {
 }
 
 const Login = () => {
-  const { setAuth } = useAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [login, setLogin] = useState<ILoginState>({
     email: '',
     password: ''
@@ -25,31 +26,30 @@ const Login = () => {
     });
   };
 
+  const [loginUser, {data, isSuccess, isLoading, isError, error}] = useLoginMutation();
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
-    console.log(login);
-    try {
-      const res = await loginAdmin(login.email, login.password);
-      Cookies.set('token', res.data.token);
-      console.log(res.data.token);
-      Cookies.set('admin', JSON.stringify(res.data.admin));
-      setAuth({
-        token: res.data.token,
-        admin: res.data.admin ?? {
-          name: '',
-          email: ''
-        }
-      });
-      console.log(res);
+    if (!login.email || !login.password) {
+      return alert('Please fill all fields');
     }
-    catch (error) {
-      console.log(error);
-    }
-    finally {
-      setIsLoading(false);
-    }
+    await loginUser(login);
   };
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      console.log(data);
+      dispatch(loginReducer({token: data.data.token, admin: data.data.admin}));
+      navigate('/');
+      alert('Login successful');
+    }
+    if (isError && error) {
+      const errorMessage = error as {data: {message: string}};
+      alert(errorMessage.data.message);
+    }
+  }, [isSuccess, isError, data, error]);
+
 
   return (
       <div className='flex flex-col justify-center items-center h-full'>

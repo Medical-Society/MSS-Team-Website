@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import Cookies from 'js-cookie'
 
 interface IProps {
     children: ReactNode;
@@ -8,10 +8,14 @@ interface IProps {
     isAuth: boolean;
 }
 
-const ProtectedRoute = ({ children, redirectPath, isAuth }: IProps) => {
-    const { auth } = useAuth();
-    const isAuthUser = isAuth ? auth.token : !auth.token;
-    return isAuthUser ? <Navigate to={redirectPath} /> : <>{children}</>;
+const ProtectedRoute = ({ children, redirectPath, isAuth}: IProps) => {
+    const token = Cookies.get('token');
+    if(isAuth){
+        return token ? <>{children}</> : <Navigate to={redirectPath} />;
+    }
+    else{
+        return !token ? <>{children}</> : <Navigate to={redirectPath} />;
+    }
 }
 
 export default ProtectedRoute;

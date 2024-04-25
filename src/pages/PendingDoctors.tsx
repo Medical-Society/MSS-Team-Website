@@ -1,83 +1,50 @@
-import { Card, Typography } from "@material-tailwind/react";
- 
-const TABLE_HEAD = ["","Client name", "Status"];
- 
-const TABLE_ROWS = [
-    { name: "Yostena lewis", status: "pending" },
-    { name: "Yostena lewis", status: "pending" },
-    { name: "Yostena lewis", status: "pending" },
-    { name: "Yostena lewis", status: "pending" },
-    { name: "Yostena lewis", status: "pending" },
-    { name: "Yostena lewis", status: "pending" },
-    { name: "Yostena lewis", status: "pending" },
-];
- 
- const PendingDoctors = () => {
-  return (
-    <Card className="w-full mb-40 ml-1 mt-3">
-      <table className="w-full min-w-max text-center">
-        <thead>
-          <tr>
-            {TABLE_HEAD.map((head) => (
-              <th
-                key={head}
-                className="border-b border-blue-gray-100 p-4 bg-gray-100 border-l border-blue-gray-100"
-               >
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="text-violet-950 text-[20px] font-medium font-['Cairo'] border-l border-blue-gray-100"
-                >
-                  {head}
-                </Typography>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {TABLE_ROWS.map(({ name,status }, index) => {
-            const counter = index + 1;
-            const isLast = index === TABLE_ROWS.length - 1;
-            const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
-            const verticalLine = "border-l border-blue-gray-100";
-            return (
-              <tr key={name}>
-                <td className={`${classes} `}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {counter}
-                  </Typography>
-                </td>
+import { useState } from "react";
+import Paginator from "../Components/Paginator";
+import Taple from "../Components/Taple";
+import { useGetPendingDoctorsQuery } from "../app/services/DoctorsApi";
+import { IDoctor } from "../interfaces";
 
+interface IProps {
 
-                <td className={`${classes} ${verticalLine}`}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {name}
-                  </Typography>
-                </td>
-                <td className={`${classes} ${verticalLine}`}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {status}
-                  </Typography>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </Card>
-  );
 }
 
-export default PendingDoctors;
+const PendingDoctors = ({}: IProps) => {
+  const [page, setPage] = useState<number>(1)
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const {data, isLoading, isError} = useGetPendingDoctorsQuery({page, limit: rowsPerPage})
+    
+  if(isLoading) return <div className="flex justify-center items-center">Loading...</div>
+  if(isError) return <div className="flex justify-center items-center">Error...</div>
+    const allDoctors: IDoctor[] = data?.data?.doctors || []
+    const totalPages = data?.data?.totalPages || 0
+    return (
+      <div className="w-full">
+        <Taple
+          data={allDoctors} 
+        />
+        <div className="flex justify-center items-center space-x-5">
+          <select
+            value={rowsPerPage}
+            onChange={(e) => setRowsPerPage(Number(e.target.value))}
+            className="mt-4"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+          
+          <Paginator
+            page={page}
+            pageCount={totalPages}
+            total={totalPages * rowsPerPage}
+            isLoading={false}
+            onClickPrev={() => setPage(page - 1)}
+            onClickNext={() => setPage(page + 1)}
+          />
+        </div>
+      </div>
+    )
+}
+
+export default PendingDoctors

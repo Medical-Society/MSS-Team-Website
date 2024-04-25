@@ -8,8 +8,9 @@ import VerifyEmail from "../pages/VerifyEmail";
 import DoctorsSideBar from "../Components/DoctorsSideBar";
 import AllDoctors from "../pages/AllDoctors";
 import PendingDoctors from "../pages/PendingDoctors";
-import ApprovedDoctors from "../pages/ApprovedDoctors";
+import ApprovedDoctors from "../pages/AcceptedDoctors";
 import RejectedDoctors from "../pages/RejectedDoctors";
+import DoctorDetails from "../Components/DoctorDetails";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -25,7 +26,7 @@ const router = createBrowserRouter(
             >
                 <Route index element={<Home />} />
                 <Route path="login" element={
-                    <ProtectedRoute isAuth={true} redirectPath="/doctors">
+                    <ProtectedRoute redirectPath="/" isAuth={false}>
                         <Login />
                     </ProtectedRoute>
                 } />
@@ -40,9 +41,9 @@ const router = createBrowserRouter(
                     <Route path="patients" element={<VerifyEmail />} />
                 </Route>
                 
-                <Route path="/doctors" element={
-                    <ProtectedRoute isAuth={false} redirectPath="/login">
-                        <div className="flex flex-col md:flex-row  items-center justify-between h-full">
+                <Route path="doctors" element={
+                    <ProtectedRoute isAuth={true} redirectPath="/login">
+                        <div className="flex flex-col md:flex-row  justify-between h-full mt-14">
                             <DoctorsSideBar />
                             <Outlet />
                         </div>
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
                     <Route path="pending" element={<PendingDoctors />} />
                     <Route path="approved" element={<ApprovedDoctors />} />
                     <Route path="rejected" element={<RejectedDoctors />} />
+                    <Route path=":id" element={<DoctorDetails />} />
                 </Route>
             </Route>
 
