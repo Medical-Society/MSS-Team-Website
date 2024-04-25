@@ -14,6 +14,7 @@ const AllDoctors = ({}: IProps) => {
     
     if(isLoading) return <div className="flex justify-center items-center">Loading...</div>
     if(isError) console.log(error)
+      
     if(isError) return <div className="flex justify-center items-center">Error...</div>
     const allDoctors: IDoctor[] = data?.data?.doctors || []
     const totalPages = data?.data?.totalPages || 0
