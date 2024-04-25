@@ -48,9 +48,20 @@ export const DoctorsApi = createApi({
                 };
             }
         }),
+        getDoctorById: builder.query({
+            query: (id: string) => {
+                const token = Cookies.get('token');
+                return {
+                    url: `doctors/${id}`,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
+            }
+        }),
     }),
 });
 
-export const {useGetAllDoctorsQuery, useGetPendingDoctorsQuery, useGetAcceptedDoctorsQuery, useGetRejectedDoctorsQuery} = DoctorsApi;
+export const {useGetAllDoctorsQuery, useGetPendingDoctorsQuery, useGetAcceptedDoctorsQuery, useGetRejectedDoctorsQuery, useGetDoctorByIdQuery} = DoctorsApi;
 
 export default DoctorsApi;

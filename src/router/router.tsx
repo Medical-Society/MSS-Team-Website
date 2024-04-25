@@ -10,6 +10,7 @@ import AllDoctors from "../pages/AllDoctors";
 import PendingDoctors from "../pages/PendingDoctors";
 import ApprovedDoctors from "../pages/AcceptedDoctors";
 import RejectedDoctors from "../pages/RejectedDoctors";
+import DoctorDetails from "../Components/DoctorDetails";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -40,7 +41,7 @@ const router = createBrowserRouter(
                     <Route path="patients" element={<VerifyEmail />} />
                 </Route>
                 
-                <Route path="/doctors" element={
+                <Route path="doctors" element={
                     <ProtectedRoute isAuth={true} redirectPath="/login">
                         <div className="flex flex-col md:flex-row  justify-between h-full mt-14">
                             <DoctorsSideBar />
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
                     <Route path="pending" element={<PendingDoctors />} />
                     <Route path="approved" element={<ApprovedDoctors />} />
                     <Route path="rejected" element={<RejectedDoctors />} />
+                    <Route path=":id" element={<DoctorDetails />} />
                 </Route>
             </Route>
 
