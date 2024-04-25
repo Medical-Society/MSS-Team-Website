@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import FormInput from "../Components/Login/FormInput";
 import Button from "../Components/Login/Button";
+import { loginAdmin } from "../services/auth";
 import { useDispatch } from "react-redux";
 import { loginReducer } from "../app/features/authSlice";
 import { useLoginMutation } from "../app/services/authApi";
+import { useNavigate } from "react-router-dom";
 
 interface ILoginState {
   email: string;
@@ -12,6 +14,7 @@ interface ILoginState {
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [login, setLogin] = useState<ILoginState>({
     email: '',
     password: ''
@@ -26,6 +29,7 @@ const Login = () => {
 
   const [loginUser, {data, isSuccess, isLoading, isError, error}] = useLoginMutation();
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!login.email || !login.password) {
@@ -37,7 +41,8 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess && data) {
       console.log(data);
-      dispatch(loginReducer({token: data.data.token, admin: data.data.result}))
+      dispatch(loginReducer({token: data.data.token, admin: data.data.admin}));
+      navigate('/');
       alert('Login successful');
     }
     if (isError && error) {
@@ -45,6 +50,7 @@ const Login = () => {
       alert(errorMessage.data.message);
     }
   }, [isSuccess, isError, data, error]);
+
 
   return (
       <div className='flex flex-col justify-center items-center h-full'>

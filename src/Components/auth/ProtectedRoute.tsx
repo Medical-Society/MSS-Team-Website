@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
 
 interface IProps {
     children: ReactNode;
@@ -8,10 +8,14 @@ interface IProps {
     isAuth: boolean;
 }
 
-const ProtectedRoute = ({ children, redirectPath, isAuth }: IProps) => {
+const ProtectedRoute = ({ children, redirectPath, isAuth}: IProps) => {
     const token = Cookies.get('token');
-    const isAuthAdmin = isAuth ? token : !token;
-    return isAuthAdmin ? <Navigate to={redirectPath} /> : <>{children}</>;
+    if(isAuth){
+        return token ? <>{children}</> : <Navigate to={redirectPath} />;
+    }
+    else{
+        return !token ? <>{children}</> : <Navigate to={redirectPath} />;
+    }
 }
 
 export default ProtectedRoute;

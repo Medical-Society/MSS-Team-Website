@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import { logoutReducer } from "../app/features/authSlice";
 import { RootState } from "../app/store";
@@ -9,9 +9,11 @@ interface IProps {
 const Navbar = ({}: IProps) => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { token } = useSelector((state: RootState) => state.auth)
   const handleLogout = () => {
     dispatch(logoutReducer());
+    navigate('/login');
   }
   return (
     <div className="bg-NewBlue text-white fixed top-0 z-20 left-0 w-full drop-shadow-sm p-4 flex justify-between items-center backdropfilter backdrop-blur-sm mb-20"> 

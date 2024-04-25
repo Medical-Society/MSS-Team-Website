@@ -25,7 +25,7 @@ const router = createBrowserRouter(
             >
                 <Route index element={<Home />} />
                 <Route path="login" element={
-                    <ProtectedRoute isAuth={true} redirectPath="/doctors">
+                    <ProtectedRoute redirectPath="/" isAuth={false}>
                         <Login />
                     </ProtectedRoute>
                 } />
@@ -41,7 +41,7 @@ const router = createBrowserRouter(
                 </Route>
                 
                 <Route path="/doctors" element={
-                    <ProtectedRoute isAuth={false} redirectPath="/login">
+                    <ProtectedRoute isAuth={true} redirectPath="/login">
                         <div className="flex flex-col md:flex-row  justify-between h-full mt-14">
                             <DoctorsSideBar />
                             <Outlet />
