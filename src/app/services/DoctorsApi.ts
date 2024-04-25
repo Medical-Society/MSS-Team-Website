@@ -59,9 +59,24 @@ export const DoctorsApi = createApi({
                 };
             }
         }),
+        changeDoctorStatus: builder.mutation({
+            query: ({id, status} : {id: string, status: string}) => {
+                const token = Cookies.get('token');
+                return {
+                    url: `doctors/status/${id}`,
+                    method: 'PATCH',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: {
+                        status,
+                    },
+                };
+            }
+        }),
     }),
 });
 
-export const {useGetAllDoctorsQuery, useGetPendingDoctorsQuery, useGetAcceptedDoctorsQuery, useGetRejectedDoctorsQuery, useGetDoctorByIdQuery} = DoctorsApi;
+export const {useGetAllDoctorsQuery, useGetPendingDoctorsQuery, useGetAcceptedDoctorsQuery, useGetRejectedDoctorsQuery, useGetDoctorByIdQuery, useChangeDoctorStatusMutation} = DoctorsApi;
 
 export default DoctorsApi;

@@ -13,8 +13,8 @@ const RejectedDoctors = ({}: IProps) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const {data, isLoading, isError} = useGetRejectedDoctorsQuery({page, limit: rowsPerPage})
     
-    if(isLoading) return <div>Loading...</div>
-    if(isError) return <div>Error...</div>
+  if(isLoading) return <div className="flex justify-center items-center">Loading...</div>
+  if(isError) return <div className="flex justify-center items-center">Error...</div>
     const allDoctors: IDoctor[] = data?.data?.doctors || []
     const totalPages = data?.data?.totalPages || 0
     return (

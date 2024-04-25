@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import FormInput from "../Components/Login/FormInput";
 import Button from "../Components/Login/Button";
-import { loginAdmin } from "../services/auth";
 import { useDispatch } from "react-redux";
 import { loginReducer } from "../app/features/authSlice";
 import { useLoginMutation } from "../app/services/authApi";
