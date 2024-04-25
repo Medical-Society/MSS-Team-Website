@@ -10,9 +10,10 @@ interface IProps {
 const AllDoctors = ({}: IProps) => {
   const [page, setPage] = useState<number>(1)
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const {data, isLoading, isError} = useGetAllDoctorsQuery({page, limit: rowsPerPage})
+  const {data, isLoading, isError, error} = useGetAllDoctorsQuery({page, limit: rowsPerPage})
     
     if(isLoading) return <div className="flex justify-center items-center">Loading...</div>
+    if(isError) console.log(error)
     if(isError) return <div className="flex justify-center items-center">Error...</div>
     const allDoctors: IDoctor[] = data?.data?.doctors || []
     const totalPages = data?.data?.totalPages || 0
