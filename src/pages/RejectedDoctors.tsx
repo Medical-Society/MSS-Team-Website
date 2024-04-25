@@ -10,7 +10,7 @@ interface IProps {
 
 const RejectedDoctors = ({}: IProps) => {
   const [page, setPage] = useState<number>(1)
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const {data, isLoading, isError} = useGetRejectedDoctorsQuery({page, limit: rowsPerPage})
     
   if(isLoading) return <div className="flex justify-center items-center">Loading...</div>
