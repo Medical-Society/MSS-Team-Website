@@ -13,9 +13,12 @@ function App() {
       const token = Cookies.get('token');
       const admin = Cookies.get('admin');
       if (token && admin) {
-        if (token && admin) {
           dispatch(loginReducer({token, admin: JSON.parse(admin)}));
       }
+      else {
+          dispatch(loginReducer({token: null, admin: null}));
+          Cookies.remove('token');
+          Cookies.remove('admin');
       }
   }, [])
 
