@@ -5,12 +5,12 @@ import Login from "../pages/Login";
 import ProtectedRoute from "../Components/auth/ProtectedRoute";
 import ResetPassword from "../pages/ResetPass";
 import VerifyEmail from "../pages/VerifyEmail";
-import DoctorsSideBar from "../Components/DoctorsSideBar";
 import AllDoctors from "../pages/AllDoctors";
 import PendingDoctors from "../pages/PendingDoctors";
 import ApprovedDoctors from "../pages/AcceptedDoctors";
 import RejectedDoctors from "../pages/RejectedDoctors";
 import DoctorDetails from "../Components/DoctorDetails";
+import { DoctorsLayout } from "./layouts";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -43,10 +43,7 @@ const router = createBrowserRouter(
                 
                 <Route path="doctors" element={
                     <ProtectedRoute isAuth={true} redirectPath="/login">
-                        <div className="flex flex-col md:flex-row  justify-between h-full mt-14">
-                            <DoctorsSideBar />
-                            <Outlet />
-                        </div>
+                        <DoctorsLayout />
                     </ProtectedRoute>
                     }
                 >

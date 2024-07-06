@@ -12,7 +12,7 @@ const AllDoctors = ({}: IProps) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const {data, isLoading, isError, error} = useGetAllDoctorsQuery({page, limit: rowsPerPage})
     
-    if(isLoading) return <div className="flex justify-center items-center">Loading...</div>
+    if(isLoading) return <div className="flex justify-center items-center w-full h-full">Loading...</div>
     if(isError) console.log(error)
       
     if(isError) return <div className="flex justify-center items-center">Error...</div>

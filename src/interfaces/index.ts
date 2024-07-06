@@ -31,4 +31,5 @@ export interface IDoctor {
     avatar: string;
     createdAt: string;
     updatedAt: string;
+    completeImages: string[];
   }

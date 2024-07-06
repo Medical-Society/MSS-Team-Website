@@ -12,21 +12,21 @@ const DoctorDetails = ({ }: IProps) => {
     const [changeDoctorStatus, { isLoading: isChangeStatusLoading, isSuccess, isError: isChangeStatusError, data: changeStatusData, error: changeStatusError }] = useChangeDoctorStatusMutation()
 
     useEffect(() => {
-        if(isSuccess) {
+        if (isSuccess) {
             window.location.reload()
             changeStatusData && console.log(changeStatusData)
         }
-        if(isChangeStatusError) {
+        if (isChangeStatusError) {
             console.log(changeStatusError)
         }
     }, [isSuccess, isChangeStatusError, changeStatusData, changeStatusError])
 
-    const {data: doctorById, isLoading, isError} = useGetDoctorByIdQuery(id)
-    if(isLoading) return <div>Loading...</div>
-    if(isError) return <div>Error: </div>
+    const { data: doctorById, isLoading, isError } = useGetDoctorByIdQuery(id)
+    if (isLoading) return <div className="flex justify-center items-center w-full h-full">Loading...</div>
+    if (isError) return <div className="flex justify-center items-center">Error...</div>
 
-    const doctor: IDoctor = doctorById?.data?.doctor
-    const { englishFullName, arabicFullName, email, specialization, status, createdAt, isVerified, nationalID, phoneNumber, gender, clinicAddress, birthdate } = doctor
+    const doctor: IDoctor = doctorById?.data?.doctor;
+    const { englishFullName, arabicFullName, email, specialization, status, createdAt, isVerified, nationalID, phoneNumber, gender, clinicAddress, birthdate, completeImages, avatar } = doctor;
     const doctorDetailsArray = [
         { field: "Full Name in English", value: englishFullName },
         { field: "Full Name in Arabic", value: arabicFullName },
@@ -41,39 +41,37 @@ const DoctorDetails = ({ }: IProps) => {
         { field: "Clinic Address", value: clinicAddress },
         { field: "Birthdate", value: birthdate },
     ];
+    console.log(doctor)
 
     const handleApprove = async () => {
-        await changeDoctorStatus({ id, status: 'ACCEPTED' })
+        await changeDoctorStatus({ id, status: 'ACCEPTED' });
     };
 
     const handleReject = async () => {
-        await changeDoctorStatus({ id, status: 'REJECTED' })
+        await changeDoctorStatus({ id, status: 'REJECTED' });
     };
-
 
     return (
         <div className="w-full flex flex-col items-center py-10">
             <h1 className="text-2xl font-bold">Doctor Details</h1>
-            <DoctorAvatar avatar={doctor.avatar} />
+            {avatar && <DoctorAvatar avatar={avatar} />}
             <DoctorInfo doctorDetailsArray={doctorDetailsArray} />
             {doctor.status === "PENDING" && <DoctorActions handleApprove={handleApprove} handleReject={handleReject} isChangeStatusLoading={isChangeStatusLoading} />}
+            {completeImages && <DoctorImages images={completeImages} />}
         </div>
     )
 }
 
-
 const DoctorAvatar = ({ avatar }: { avatar: string }) => (
-    avatar ? <img src={avatar} alt="Doctor Avatar" className="w-40 h-40 rounded-full mt-5"/> : null
+    avatar ? <img src={avatar} alt="Doctor Avatar" className="w-40 h-40 rounded-full mt-5" /> : null
 );
-
-
 
 const DoctorInfo = ({ doctorDetailsArray }: { doctorDetailsArray: { field: string, value: string | boolean }[] }) => (
     <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2">
         {doctorDetailsArray.map(({ field, value }) => (
             <div key={field} className="flex flex-col">
                 <span className="font-semibold">{field}</span>
-                <span>{value}</span>
+                <span>{value.toString()}</span>
             </div>
         ))}
     </div>
@@ -87,7 +85,7 @@ interface IDoctorActionsProps {
 
 const DoctorActions = ({ handleApprove, handleReject, isChangeStatusLoading }: IDoctorActionsProps) => (
     <div className="mt-5">
-        <button 
+        <button
             onClick={handleApprove}
             className="bg-green-500 text-white px-3 py-1 rounded-md"
             disabled={isChangeStatusLoading}
@@ -104,4 +102,12 @@ const DoctorActions = ({ handleApprove, handleReject, isChangeStatusLoading }: I
     </div>
 );
 
-export default DoctorDetails
+const DoctorImages = ({ images }: { images: string[] }) => (
+    <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2">
+        {images.map((image, index) => (
+            <img key={index} src={image} alt={`Doctor Image ${index + 1}`} className="w-full h-auto rounded-md" />
+        ))}
+    </div>
+);
+
+export default DoctorDetails;
